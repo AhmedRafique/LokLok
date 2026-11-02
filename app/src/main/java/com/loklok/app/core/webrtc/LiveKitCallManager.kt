@@ -1,10 +1,10 @@
 package com.loklok.app.core.webrtc
 
 import android.content.Context
+import android.media.AudioManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.livekit.android.LiveKit
 import io.livekit.android.RoomOptions
-import io.livekit.android.audio.AudioSwitchHandler
 import io.livekit.android.events.RoomEvent
 import io.livekit.android.room.Room
 import io.livekit.android.room.participant.Participant
@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -163,14 +164,9 @@ class LiveKitCallManager @Inject constructor(
     }
 
     fun toggleSpeaker(speakerOn: Boolean) {
-        val audioHandler = room?.audioHandler as? AudioSwitchHandler
-        audioHandler?.let { handler ->
-            if (speakerOn) {
-                handler.selectAudioDevice(AudioSwitchHandler.AudioDevice.Speakerphone)
-            } else {
-                handler.selectAudioDevice(AudioSwitchHandler.AudioDevice.Earpiece)
-            }
-        }
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        @Suppress("DEPRECATION")
+        audioManager?.isSpeakerphoneOn = speakerOn
         _roomState.value = _roomState.value.copy(isSpeakerOn = speakerOn)
     }
 

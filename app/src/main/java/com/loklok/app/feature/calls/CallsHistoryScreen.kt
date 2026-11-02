@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallMade
 import androidx.compose.material.icons.automirrored.filled.CallMissed
 import androidx.compose.material.icons.automirrored.filled.CallReceived
-import androidx.compose.material.icons.filled.AddCall
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Divider
@@ -67,7 +66,7 @@ fun CallsHistoryScreen(
                 shape = CircleShape
             ) {
                 Icon(
-                    imageVector = Icons.Default.AddCall,
+                    imageVector = Icons.Default.Call,
                     contentDescription = "New Call",
                     modifier = Modifier.size(24.dp)
                 )

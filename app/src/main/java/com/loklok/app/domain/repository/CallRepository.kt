@@ -1,6 +1,5 @@
 package com.loklok.app.domain.repository
 
-import com.loklok.app.domain.model.CallHistory
 import com.loklok.app.domain.model.CallMediaType
 import com.loklok.app.domain.model.CallSession
 import kotlinx.coroutines.flow.Flow

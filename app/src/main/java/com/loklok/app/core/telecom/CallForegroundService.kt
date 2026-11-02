@@ -22,7 +22,7 @@ class CallForegroundService : Service() {
         val isVideo = intent?.getBooleanExtra(EXTRA_IS_VIDEO, false) ?: false
 
         val fullScreenIntent = Intent(this, CallActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         val pendingIntent = PendingIntent.getActivity(
             this,
