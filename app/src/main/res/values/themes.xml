@@ -12,8 +12,5 @@
         <item name="android:navigationBarColor">#00000000</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowShowWhenLocked">true</item>
-        <item name="android:windowTurnScreenOn">true</item>
-        <item name="android:keepScreenOn">true</item>
     </style>
 </resources>
