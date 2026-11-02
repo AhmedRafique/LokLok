@@ -56,7 +56,7 @@ class LiveKitCallManager @Inject constructor(
         ).also { room = it }
 
         scope.launch {
-            activeRoom.events.collect { event ->
+            activeRoom.events.events.collect { event: RoomEvent ->
                 when (event) {
                     is RoomEvent.Connected -> {
                         _roomState.value = _roomState.value.copy(
