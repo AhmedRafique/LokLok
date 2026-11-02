@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="loklok_primary">#00B074</color>
+    <color name="loklok_primary_dark">#008A5B</color>
+    <color name="loklok_primary_light">#E6F7F1</color>
+    
+    <color name="loklok_accent">#00D28E</color>
+    <color name="loklok_call_accept">#10B981</color>
+    <color name="loklok_call_end">#EF4444</color>
+
+    <color name="background_light">#F8FAFC</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="text_primary_light">#0F172A</color>
+    <color name="text_secondary_light">#64748B</color>
+
+    <color name="background_dark">#0B0F19</color>
+    <color name="surface_dark">#161E2E</color>
+    <color name="text_primary_dark">#F1F5F9</color>
+    <color name="text_secondary_dark">#94A3B8</color>
+</resources>

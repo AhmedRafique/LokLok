@@ -1,0 +1,27 @@
+port: 7880
+bind_addresses:
+  - ""
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 60000
+  use_external_ip: true
+
+redis:
+  address: localhost:6379
+
+keys:
+  API_KEY_LOKLOK: API_SECRET_LOKLOK_SECURE_KEY_1234567890
+
+logging:
+  json: false
+  level: info
+
+turn:
+  enabled: true
+  domain: turn.loklok.im
+  cert_file: ""
+  key_file: ""
+  tls_port: 5349
+  udp_port: 3478
+  external_tls: false

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # LiveKit SFU WebRTC Server (HD Low-Latency Audio/Video)
+  livekit:
+    image: livekit/livekit-server:v1.6
+    container_name: loklok-livekit
+    command: --config /etc/livekit.yaml
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml
+    depends_on:
+      - redis
+
+  # Coturn STUN/TURN Server (Bypasses symmetric NAT & carrier VoIP restrictions)
+  coturn:
+    image: coturn/coturn:latest
+    container_name: loklok-coturn
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./turnserver.conf:/etc/coturn/turnserver.conf
+
+  # Redis for room coordination and distributed state
+  redis:
+    image: redis:7-alpine
+    container_name: loklok-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  # PostgreSQL for users, chat metadata, and Lok Lok Pay
+  postgres:
+    image: postgres:16-alpine
+    container_name: loklok-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: loklok
+      POSTGRES_USER: loklok_user
+      POSTGRES_PASSWORD: loklok_secret_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

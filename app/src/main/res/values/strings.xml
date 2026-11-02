@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Lok Lok</string>
+    <string name="tagline">Secure Calls &amp; Instant Messaging</string>
+    
+    <!-- Navigation Tabs -->
+    <string name="tab_chats">Chats</string>
+    <string name="tab_calls">Calls</string>
+    <string name="tab_stories">Stories</string>
+    <string name="tab_wallet">Pay</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Calling Strings -->
+    <string name="incoming_call">Incoming Call…</string>
+    <string name="outgoing_call">Calling…</string>
+    <string name="call_connected">Connected</string>
+    <string name="call_ended">Call Ended</string>
+    <string name="voice_call">Voice Call</string>
+    <string name="video_call">Video Call</string>
+    <string name="mute_mic">Mute</string>
+    <string name="switch_camera">Flip</string>
+    <string name="speaker">Speaker</string>
+    <string name="end_call">End Call</string>
+    <string name="answer_call">Answer</string>
+    <string name="decline_call">Decline</string>
+
+    <!-- Chat Strings -->
+    <string name="type_a_message">Type a message…</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="typing">Typing…</string>
+    <string name="encrypted_banner">Messages and calls are end-to-end encrypted.</string>
+
+    <!-- Auth Strings -->
+    <string name="welcome_title">Welcome to Lok Lok</string>
+    <string name="welcome_subtitle">Connect with high-definition voice and video calls anywhere in the world.</string>
+    <string name="enter_phone_number">Enter your mobile number</string>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="enter_otp">Enter 6-digit Code</string>
+    <string name="continue_btn">Continue</string>
+
+    <!-- Wallet / Fintech Strings -->
+    <string name="loklok_pay">Lok Lok Pay</string>
+    <string name="send_money">Send Money</string>
+    <string name="receive_money">Request</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="available_balance">Available Balance</string>
+</resources>
