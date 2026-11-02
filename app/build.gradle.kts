@@ -92,7 +92,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // LiveKit WebRTC SDK (VoIP & Video)
-    implementation("io.livekit:livekit-android:2.1.2")
+    implementation("io.livekit:livekit-android:2.14.0")
 
     // Dependency Injection (Hilt)
     implementation("com.google.dagger:hilt-android:2.51.1")

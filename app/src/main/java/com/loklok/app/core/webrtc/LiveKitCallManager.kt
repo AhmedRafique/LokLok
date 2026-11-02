@@ -174,6 +174,11 @@ class LiveKitCallManager @Inject constructor(
         _roomState.value = _roomState.value.copy(isSpeakerOn = speakerOn)
     }
 
+    fun initVideoRenderer(renderer: io.livekit.android.renderer.TextureViewRenderer) {
+        val activeRoom = room ?: initializeRoom()
+        activeRoom.initVideoRenderer(renderer)
+    }
+
     fun disconnect() {
         scope.launch {
             localVideoTrack?.stop()

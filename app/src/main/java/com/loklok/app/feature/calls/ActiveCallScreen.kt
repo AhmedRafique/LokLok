@@ -92,7 +92,7 @@ fun ActiveCallScreen(
             AndroidView(
                 factory = { context ->
                     TextureViewRenderer(context).apply {
-                        init(io.livekit.android.LiveKit.create(context).roomOptions.eglBase?.eglBaseContext, null)
+                        viewModel.liveKitCallManager.initVideoRenderer(this)
                         roomState.remoteVideoTrack?.addRenderer(this)
                     }
                 },
@@ -113,7 +113,7 @@ fun ActiveCallScreen(
                 AndroidView(
                     factory = { context ->
                         TextureViewRenderer(context).apply {
-                            init(io.livekit.android.LiveKit.create(context).roomOptions.eglBase?.eglBaseContext, null)
+                            viewModel.liveKitCallManager.initVideoRenderer(this)
                             roomState.localVideoTrack?.addRenderer(this)
                         }
                     },
