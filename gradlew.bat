@@ -36,8 +36,9 @@ for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
 @rem Find java.exe
-if not exist "%JAVA_HOME%\bin\java.exe" (
-    if exist "E:\tools\jdk-17\bin\java.exe" set JAVA_HOME=E:\tools\jdk-17
+if exist "E:\tools\jdk-17\bin\java.exe" (
+    set "JAVA_HOME=E:\tools\jdk-17"
+    set "GRADLE_OPTS=%GRADLE_OPTS% -Dorg.gradle.java.home=E:/tools/jdk-17"
 )
 if defined JAVA_HOME goto findJavaFromJavaHome
 
