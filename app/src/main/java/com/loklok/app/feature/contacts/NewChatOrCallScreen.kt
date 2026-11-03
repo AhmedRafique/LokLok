@@ -17,11 +17,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +38,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,17 +62,17 @@ fun NewChatOrCallScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         LokLokTopBar(
-            title = "Select Contact",
-            subtitle = "${uiState.contacts.size} contacts",
+            title = "New Call / Chat",
+            subtitle = "Enter number or pick contact",
             onNavigateBack = onNavigateBack
         )
 
-        // Search Input
+        // Search / Dial Input
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
             OutlinedTextField(
                 value = uiState.searchQuery,
                 onValueChange = viewModel::onSearchChange,
-                placeholder = { Text("Search name or number…", fontSize = 14.sp) },
+                placeholder = { Text("Type phone number or contact name…", fontSize = 14.sp) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -93,10 +95,86 @@ fun NewChatOrCallScreen(
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            // New Group & New Contact shortcuts
+            // Direct Dial / Call Card if user types a number or query
+            if (uiState.searchQuery.trim().length >= 3) {
+                item {
+                    val query = uiState.searchQuery.trim()
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 6.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(14.dp)) {
+                            Text(
+                                text = "Direct Call / Message",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = LokLokPrimary
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = query,
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                IconButton(onClick = {
+                                    onStartCall(query, query, CallMediaType.VOICE)
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Call,
+                                        contentDescription = "Voice Call",
+                                        tint = LokLokPrimary
+                                    )
+                                }
+
+                                IconButton(onClick = {
+                                    onStartCall(query, query, CallMediaType.VIDEO)
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Videocam,
+                                        contentDescription = "Video Call",
+                                        tint = LokLokPrimary
+                                    )
+                                }
+
+                                IconButton(onClick = {
+                                    onContactSelectForChat(
+                                        Contact(
+                                            id = "direct_$query",
+                                            name = query,
+                                            phoneNumber = query,
+                                            isLokLokUser = true,
+                                            registeredUserId = query
+                                        )
+                                    )
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.Chat,
+                                        contentDescription = "Chat",
+                                        tint = LokLokPrimary
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Shortcuts
             item {
-                ActionShortcutRow(icon = Icons.Default.GroupAdd, title = "New Group")
-                ActionShortcutRow(icon = Icons.Default.PersonAdd, title = "New Contact")
+                ActionShortcutRow(icon = Icons.Default.GroupAdd, title = "New Group Call")
+                ActionShortcutRow(icon = Icons.Default.PersonAdd, title = "Add New Contact")
                 Divider(
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                     thickness = 0.5.dp,

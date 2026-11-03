@@ -37,10 +37,12 @@ class LokLokWebSocketClient @Inject constructor(
     private val _connectionState = MutableSharedFlow<Boolean>(replay = 1)
     val connectionState: SharedFlow<Boolean> = _connectionState.asSharedFlow()
 
-    fun connect(wsUrl: String = DEFAULT_WS_URL) {
+    fun connect(wsUrl: String = secureStorage.getSignalingWsUrl()) {
         val token = secureStorage.getAuthToken() ?: return
+        val targetUrl = if (wsUrl.isBlank()) DEFAULT_WS_URL else wsUrl
+        val separator = if (targetUrl.contains("?")) "&" else "?"
         val request = Request.Builder()
-            .url("$wsUrl?token=$token&userId=${secureStorage.getUserId()}")
+            .url("$targetUrl${separator}token=$token&userId=${secureStorage.getUserId()}")
             .build()
 
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {

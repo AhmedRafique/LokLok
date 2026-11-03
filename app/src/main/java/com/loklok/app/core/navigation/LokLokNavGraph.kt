@@ -111,6 +111,14 @@ fun LokLokNavGraph(
                 callsViewModel = callsViewModel,
                 storiesViewModel = storiesViewModel,
                 walletViewModel = walletViewModel,
+                userName = secureStorage.getDisplayName().ifBlank { "Lok Lok User" },
+                phoneNumber = secureStorage.getPhoneNumber().ifBlank { "+971 50 123 4567" },
+                liveKitServerUrl = secureStorage.getLiveKitServerUrl(),
+                signalingServerUrl = secureStorage.getSignalingWsUrl(),
+                onUpdateServerUrls = { lk, sig ->
+                    secureStorage.setLiveKitServerUrl(lk)
+                    secureStorage.setSignalingWsUrl(sig)
+                },
                 onNavigateToChat = { convId ->
                     navController.navigate(Screen.ChatDetail.createRoute(convId))
                 },

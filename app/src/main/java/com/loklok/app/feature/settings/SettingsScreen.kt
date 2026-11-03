@@ -12,21 +12,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Devices
+import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -40,8 +50,62 @@ import com.loklok.app.core.designsystem.theme.LokLokPrimary
 fun SettingsScreen(
     userName: String = "Lok Lok User",
     phoneNumber: String = "+971 50 123 4567",
+    liveKitServerUrl: String = "wss://livekit.loklok.im",
+    signalingServerUrl: String = "wss://api.loklok.im/ws",
+    onUpdateServerUrls: (String, String) -> Unit = { _, _ -> },
     onLogoutClick: () -> Unit
 ) {
+    var showServerDialog by remember { mutableStateOf(false) }
+    var currentLiveKitUrl by remember { mutableStateOf(liveKitServerUrl) }
+    var currentSignalingUrl by remember { mutableStateOf(signalingServerUrl) }
+
+    if (showServerDialog) {
+        AlertDialog(
+            onDismissRequest = { showServerDialog = false },
+            title = { Text("Server & VoIP Network Settings", fontWeight = FontWeight.Bold) },
+            text = {
+                Column {
+                    Text(
+                        text = "Set the LiveKit WebRTC and Signaling URLs for calling between your devices (e.g. your PC's local Wi-Fi IP or LiveKit Cloud).",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedTextField(
+                        value = currentLiveKitUrl,
+                        onValueChange = { currentLiveKitUrl = it },
+                        label = { Text("LiveKit WebRTC URL") },
+                        placeholder = { Text("wss://my-app.livekit.cloud") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = currentSignalingUrl,
+                        onValueChange = { currentSignalingUrl = it },
+                        label = { Text("Signaling WebSocket URL") },
+                        placeholder = { Text("ws://192.168.1.x:8080/ws") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    onUpdateServerUrls(currentLiveKitUrl, currentSignalingUrl)
+                    showServerDialog = false
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showServerDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -87,6 +151,15 @@ fun SettingsScreen(
 
         // Settings items
         item {
+            SettingsCategoryTitle(title = "Network & VoIP Relay")
+            SettingsRow(
+                icon = Icons.Default.Dns,
+                title = "Server & VoIP Relay",
+                subtitle = "LiveKit: $liveKitServerUrl",
+                onClick = { showServerDialog = true }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
             SettingsCategoryTitle(title = "General & Security")
             SettingsRow(icon = Icons.Default.Lock, title = "Account & Privacy", subtitle = "Security keys, two-step verification")
             SettingsRow(icon = Icons.Default.Devices, title = "Linked Devices", subtitle = "Lok Lok Web & Desktop")
@@ -160,7 +233,8 @@ fun SettingsRow(
             Text(
                 text = subtitle,
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                maxLines = 1
             )
         }
         Icon(

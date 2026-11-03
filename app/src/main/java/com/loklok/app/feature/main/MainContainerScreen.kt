@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.DonutLarge
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
@@ -44,7 +44,7 @@ import com.loklok.app.feature.wallet.LokLokPayScreen
 import com.loklok.app.feature.wallet.WalletViewModel
 
 enum class NavigationTab(val label: String, val icon: ImageVector) {
-    CHATS("Chats", Icons.Default.Chat),
+    CHATS("Chats", Icons.AutoMirrored.Filled.Chat),
     CALLS("Calls", Icons.Default.Call),
     STORIES("Stories", Icons.Default.DonutLarge),
     PAY("Pay", Icons.Default.AccountBalanceWallet),
@@ -57,6 +57,11 @@ fun MainContainerScreen(
     callsViewModel: CallsHistoryViewModel,
     storiesViewModel: StoriesViewModel,
     walletViewModel: WalletViewModel,
+    userName: String = "Lok Lok User",
+    phoneNumber: String = "+971 50 123 4567",
+    liveKitServerUrl: String = "wss://livekit.loklok.im",
+    signalingServerUrl: String = "wss://api.loklok.im/ws",
+    onUpdateServerUrls: (String, String) -> Unit = { _, _ -> },
     onNavigateToChat: (String) -> Unit,
     onStartCall: (String, String, CallMediaType) -> Unit,
     onNewChatOrCall: () -> Unit,
@@ -149,6 +154,11 @@ fun MainContainerScreen(
                     onScanQrClick = { /* Open camera QR */ }
                 )
                 NavigationTab.SETTINGS -> SettingsScreen(
+                    userName = userName,
+                    phoneNumber = phoneNumber,
+                    liveKitServerUrl = liveKitServerUrl,
+                    signalingServerUrl = signalingServerUrl,
+                    onUpdateServerUrls = onUpdateServerUrls,
                     onLogoutClick = onLogout
                 )
             }

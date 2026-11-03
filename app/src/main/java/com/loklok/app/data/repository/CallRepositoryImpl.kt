@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import com.loklok.app.core.security.SecureStorage
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,7 +26,8 @@ import javax.inject.Singleton
 class CallRepositoryImpl @Inject constructor(
     private val callDao: CallDao,
     private val liveKitCallManager: LiveKitCallManager,
-    private val webSocketClient: LokLokWebSocketClient
+    private val webSocketClient: LokLokWebSocketClient,
+    private val secureStorage: SecureStorage
 ) : CallRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -145,7 +147,7 @@ class CallRepositoryImpl @Inject constructor(
         mediaType: CallMediaType
     ): Result<CallSession> {
         val callId = "call_" + UUID.randomUUID().toString().take(12)
-        val serverUrl = "wss://livekit.loklok.im"
+        val serverUrl = secureStorage.getLiveKitServerUrl()
         val sampleToken = "jwt_livekit_" + UUID.randomUUID().toString()
 
         val session = CallSession(

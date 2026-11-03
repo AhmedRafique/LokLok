@@ -44,6 +44,16 @@ class SecureStorage @Inject constructor(
     fun getPhoneNumber(): String = prefs.getString(KEY_PHONE_NUMBER, "") ?: ""
     fun getDisplayName(): String = prefs.getString(KEY_DISPLAY_NAME, "") ?: ""
 
+    fun getLiveKitServerUrl(): String = prefs.getString(KEY_LIVEKIT_URL, "wss://livekit.loklok.im") ?: "wss://livekit.loklok.im"
+    fun setLiveKitServerUrl(url: String) {
+        prefs.edit().putString(KEY_LIVEKIT_URL, url).apply()
+    }
+
+    fun getSignalingWsUrl(): String = prefs.getString(KEY_SIGNALING_URL, "wss://api.loklok.im/ws") ?: "wss://api.loklok.im/ws"
+    fun setSignalingWsUrl(url: String) {
+        prefs.edit().putString(KEY_SIGNALING_URL, url).apply()
+    }
+
     fun isLoggedIn(): Boolean = !getAuthToken().isNullOrBlank()
 
     fun clearSession() {
@@ -55,5 +65,7 @@ class SecureStorage @Inject constructor(
         private const val KEY_USER_ID = "user_id"
         private const val KEY_PHONE_NUMBER = "phone_number"
         private const val KEY_DISPLAY_NAME = "display_name"
+        private const val KEY_LIVEKIT_URL = "livekit_server_url"
+        private const val KEY_SIGNALING_URL = "signaling_ws_url"
     }
 }
