@@ -10,7 +10,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class AuthUiState(
+    val countryCode: String = "+971",
     val phoneNumber: String = "",
+    val fullPhoneNumber: String = "",
     val otpCode: String = "",
     val displayName: String = "",
     val statusBio: String = "Hey there! I am using Lok Lok.",
@@ -29,6 +31,11 @@ class PhoneAuthViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
 
+    fun onCountryCodeChange(code: String) {
+        val clean = if (code.startsWith("+")) code else "+$code"
+        _uiState.value = _uiState.value.copy(countryCode = clean, errorMessage = null)
+    }
+
     fun onPhoneNumberChange(number: String) {
         _uiState.value = _uiState.value.copy(phoneNumber = number, errorMessage = null)
     }
@@ -46,15 +53,21 @@ class PhoneAuthViewModel @Inject constructor(
     }
 
     fun sendOtp() {
-        val phone = _uiState.value.phoneNumber.trim()
-        if (phone.length < 8) {
+        val rawPhone = _uiState.value.phoneNumber.trim().replace(" ", "").replace("-", "")
+        if (rawPhone.length < 4) {
             _uiState.value = _uiState.value.copy(errorMessage = "Please enter a valid phone number")
             return
         }
 
+        val fullPhone = "${_uiState.value.countryCode.trim()}$rawPhone"
+
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            val result = authRepository.requestOtp(phone)
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                errorMessage = null,
+                fullPhoneNumber = fullPhone
+            )
+            val result = authRepository.requestOtp(fullPhone)
             result.onSuccess {
                 _uiState.value = _uiState.value.copy(isLoading = false, isOtpSent = true)
             }.onFailure { error ->
@@ -63,8 +76,13 @@ class PhoneAuthViewModel @Inject constructor(
         }
     }
 
+    fun autoFillTestOtp() {
+        _uiState.value = _uiState.value.copy(otpCode = "123456", errorMessage = null)
+        verifyOtp()
+    }
+
     fun verifyOtp() {
-        val phone = _uiState.value.phoneNumber.trim()
+        val phone = _uiState.value.fullPhoneNumber.ifBlank { _uiState.value.phoneNumber.trim() }
         val code = _uiState.value.otpCode.trim()
         if (code.length != 6) {
             _uiState.value = _uiState.value.copy(errorMessage = "Please enter all 6 digits")

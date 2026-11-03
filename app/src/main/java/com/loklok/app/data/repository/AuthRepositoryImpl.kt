@@ -31,7 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun requestOtp(phoneNumber: String): Result<Boolean> {
         // Simulates carrier/SMS gateway delivery with instant success for test/prod integration
-        return if (phoneNumber.length >= 7) {
+        return if (phoneNumber.length >= 4) {
             Result.success(true)
         } else {
             Result.failure(IllegalArgumentException("Invalid phone number format"))
